@@ -3,13 +3,14 @@ server:
 spring:
   application:
     name: gateway
-  cloud:
-    gateway:
-      routes:
-        - id: qa
-          uri: http://192.168.101.232:8004
-          predicates:
-            - Switch=true
+# 此处路由需要启动后动态添加，这样，才能修改路由，实现启停
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: baidu
+#          uri: https://www.baidu.com
+#          predicates:
+#            - Switch=true
 management:
   endpoints:
     web:
