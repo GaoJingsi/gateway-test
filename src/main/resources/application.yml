@@ -1,6 +1,42 @@
 server:
   port: 10000
 spring:
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
+    password:
+  #  cloud:
+#    gateway:
+#      routes:
+#        - id: add_request_header_route
+#          uri: http://192.168.0.254:8000
+#          filters:
+#            - AddRequestHeader=Authorization
+#          predicates:
+#            - Switch=true
+  security:
+    oauth2:
+      client:
+        registration:
+          sso:
+            client-id: yibaoApp
+#            client-id: yibaoApp2
+            client-secret: yibaoAppSecret
+#            authorization-grant-type: client_credentials
+            authorization-grant-type: authorization_code
+            redirect-uri: http://192.168.0.254:10000/login/oauth2/code/sso
+            scope: all
+        provider:
+          sso:
+            user-info-uri: http://192.168.0.254:8000/principal
+            authorization-uri: http://192.168.0.254:8000/oauth/authorize
+            token-uri: http://192.168.0.254:8000/oauth/token
+            user-name-attribute: name
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://192.168.0.254:8000/oauth/token_key
   application:
     name: gateway
 # 此处路由需要启动后动态添加，这样，才能修改路由，实现启停
@@ -11,6 +47,7 @@ spring:
 #          uri: https://www.baidu.com
 #          predicates:
 #            - Switch=true
+
 management:
   endpoints:
     web:
@@ -21,4 +58,7 @@ management:
       show-details: always
 logging:
   level:
-    org.springframework.cloud.gateway: trace
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.boot.autoconfigure: INFO
