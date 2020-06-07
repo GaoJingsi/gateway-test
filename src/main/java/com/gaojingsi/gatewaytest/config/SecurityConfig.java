@@ -36,27 +36,30 @@ public class SecurityConfig {
 //        return new MapReactiveUserDetailsService(user);
 //    }
 
-//    @Bean
-//    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-//        http
-//                // ...
-//                .oauth2Login(withDefaults());
-//        return http.build();
-//    }
-
     @Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrations) {
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
                 // ...
                 .authorizeExchange(exchange -> {
                     exchange.anyExchange().authenticated();
                 })
-                .oauth2Login(oauth2 -> oauth2
-                        .clientRegistrationRepository(clientRegistrations)
-                )
-                .csrf(ServerHttpSecurity.CsrfSpec::disable);
+                .oauth2Login(withDefaults());
         return http.build();
     }
+
+//    @Bean
+//    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrations) {
+//        http
+//                // ...
+//                .authorizeExchange(exchange -> {
+//                    exchange.anyExchange().authenticated();
+//                })
+//                .oauth2Login(oauth2 -> oauth2
+//                        .clientRegistrationRepository(clientRegistrations)
+//                )
+//                .csrf(ServerHttpSecurity.CsrfSpec::disable);
+//        return http.build();
+//    }
 
 //    @Bean
 //    ReactiveClientRegistrationRepository clientRegistrations() {
@@ -81,14 +84,14 @@ public class SecurityConfig {
         return resolver;
     }
 
-    @Bean
-    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
-        return new HiddenHttpMethodFilter() {
-            @Override
-            public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-                return chain.filter(exchange);
-            }
-        };
-    }
+//    @Bean
+//    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+//        return new HiddenHttpMethodFilter() {
+//            @Override
+//            public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+//                return chain.filter(exchange);
+//            }
+//        };
+//    }
 
 }

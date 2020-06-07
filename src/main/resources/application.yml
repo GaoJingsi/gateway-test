@@ -20,16 +20,18 @@ spring:
     oauth2:
       client:
         registration:
-          sso:
+          qa:
             client-id: yibaoApp
 #            client-id: yibaoApp2
             client-secret: yibaoAppSecret
 #            authorization-grant-type: client_credentials
             authorization-grant-type: authorization_code
-            redirect-uri: http://192.168.0.254:10000/login/oauth2/code/sso
+            redirect-uri: http://192.168.0.254:10000/login/oauth2/code/qa
+#            redirect-uri: http://192.168.0.254:10000/oauth2/authorization/qa
+#            redirect-uri: http://192.168.0.254:10000/login
             scope: all
         provider:
-          sso:
+          qa:
             user-info-uri: http://192.168.0.254:8000/principal
             authorization-uri: http://192.168.0.254:8000/oauth/authorize
             token-uri: http://192.168.0.254:8000/oauth/token
@@ -60,5 +62,5 @@ logging:
   level:
     root: INFO
     org.springframework.web: INFO
-    org.springframework.security: INFO
+    org.springframework.security: DEBUG
     org.springframework.boot.autoconfigure: INFO
