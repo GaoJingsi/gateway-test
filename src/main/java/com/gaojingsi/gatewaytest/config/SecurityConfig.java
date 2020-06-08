@@ -1,15 +1,21 @@
 package com.gaojingsi.gatewaytest.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.session.CookieWebSessionIdResolver;
 import org.springframework.web.server.session.WebSessionIdResolver;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -26,7 +32,25 @@ public class SecurityConfig {
 //    }
 
     @Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository) {
+    public DefaultReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+            ReactiveClientRegistrationRepository clientRegistrationRepository,
+            ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
+
+        ReactiveOAuth2AuthorizedClientProvider auth2AuthorizedClientProvider =
+                ReactiveOAuth2AuthorizedClientProviderBuilder
+                        .builder()
+                        .clientCredentials()
+                        .build();
+
+        DefaultReactiveOAuth2AuthorizedClientManager authorizedClientManager =
+                new DefaultReactiveOAuth2AuthorizedClientManager(clientRegistrationRepository, authorizedClientRepository);
+        authorizedClientManager.setAuthorizedClientProvider(auth2AuthorizedClientProvider);
+
+        return authorizedClientManager;
+    }
+
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository) {
         http
                 // ...
                 .authorizeExchange(exchange -> {
@@ -36,7 +60,7 @@ public class SecurityConfig {
                     oauth2
                             .clientRegistrationRepository(clientRegistrationRepository);
                 })
-                .csrf(csrf -> csrf.disable());
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 
