@@ -11,7 +11,7 @@ spring:
 #    gateway:
 #      routes:
 #        - id: add_request_header_route
-#          uri: http://192.168.0.254:8000
+#          uri: http://{baseHost}:8000
 #          filters:
 #            - AddRequestHeader=Authorization
 #          predicates:
@@ -32,13 +32,13 @@ spring:
             scope: all
         provider:
           qa:
-            user-info-uri: http://192.168.0.254:8000/principal
-            authorization-uri: http://192.168.0.254:8000/oauth/authorize
-            token-uri: http://192.168.0.254:8000/oauth/token
+            user-info-uri: 'http://{baseHost}:8000/principal'
+            authorization-uri: 'http://{baseHost}:8000/oauth/authorize'
+            token-uri: 'http://{baseHost}:8000/oauth/token'
             user-name-attribute: name
       resourceserver:
         jwt:
-          jwk-set-uri: http://192.168.0.254:8000/oauth/token_key
+          jwk-set-uri: 'http://{baseHost}:8000/oauth/token_key'
   application:
     name: gateway
 # 此处路由需要启动后动态添加，这样，才能修改路由，实现启停
