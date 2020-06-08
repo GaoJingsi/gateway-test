@@ -36,7 +36,7 @@ public class SecurityConfig {
                     oauth2
                             .clientRegistrationRepository(clientRegistrationRepository);
                 })
-                .csrf(csrf -> csrf.disable());
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);
         return http.build();
     }
 
