@@ -1,12 +1,12 @@
 server:
   port: 10000
 spring:
-  session:
-    store-type: redis
-  redis:
-    host: localhost
-    port: 6379
-    password:
+#  session:
+#    store-type: redis
+#  redis:
+#    host: localhost
+#    port: 6379
+#    password:
   #  cloud:
 #    gateway:
 #      routes:
@@ -26,9 +26,9 @@ spring:
             client-secret: yibaoAppSecret
 #            authorization-grant-type: client_credentials
             authorization-grant-type: authorization_code
-            redirect-uri: http://192.168.0.254:10000/login/oauth2/code/qa
-#            redirect-uri: http://192.168.0.254:10000/oauth2/authorization/qa
-#            redirect-uri: http://192.168.0.254:10000/login
+            redirect-uri: '{baseUrl}/login/oauth2/code/qa'
+#            redirect-uri: '{baseUrl}/oauth2/authorization/qa'
+#            redirect-uri: '{baseUrl}/login'
             scope: all
         provider:
           qa:
