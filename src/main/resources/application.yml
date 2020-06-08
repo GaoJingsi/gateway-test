@@ -35,10 +35,8 @@ spring:
             user-info-uri: http://192.168.101.232:8000/principal
             authorization-uri: http://192.168.101.232:8000/oauth/authorize
             token-uri: http://192.168.101.232:8000/oauth/token
-            user-name-attribute: name
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://192.168.101.232:8000/oauth/token_key
+            user-name-attribute: principal
+            jwk-set-uri: http://192.168.101.232:8000/oauth/token_key
   application:
     name: gateway
 # 此处路由需要启动后动态添加，这样，才能修改路由，实现启停

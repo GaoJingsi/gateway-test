@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.server.session.CookieWebSessionIdResolver;
 import org.springframework.web.server.session.WebSessionIdResolver;
@@ -25,13 +26,17 @@ public class SecurityConfig {
 //    }
 
     @Bean
-    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+    SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository) {
         http
                 // ...
                 .authorizeExchange(exchange -> {
                     exchange.anyExchange().authenticated();
                 })
-                .oauth2Login(withDefaults());
+                .oauth2Login(oauth2 -> {
+                    oauth2
+                            .clientRegistrationRepository(clientRegistrationRepository);
+                })
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 
